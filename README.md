@@ -1,5 +1,4 @@
-# codecam
-CODECAM
+# CODECAM
 
 ```
 npm install -g codecam
