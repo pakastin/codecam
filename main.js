@@ -1,3 +1,4 @@
+'use strict'
 /* global Blob, MediaRecorder, URL */
 const { desktopCapturer, remote } = require('electron')
 

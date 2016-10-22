@@ -1,4 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+'use strict'
+
+const { app, BrowserWindow } = require('electron')
 
 let mainWindow
 
