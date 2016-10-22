@@ -1,6 +1,6 @@
 # CODECAM
-
+## Usage
 ```
-npm install
-npm start
+npm install -g codecam
+codecam
 ```
