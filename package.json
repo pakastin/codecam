@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "editor-web": "github:pakastin/editor-web",
     "electron": "~1.4.4"
   }
 }
