@@ -4,11 +4,13 @@ const { desktopCapturer, ipcRenderer, remote } = require('electron')
 
 ipcRenderer.on('record-start', () => {
   const win = remote.getCurrentWindow()
+
   record(win)
 })
 
 ipcRenderer.on('record-stop', () => {
   const win = remote.getCurrentWindow()
+
   stop(win)
 })
 
@@ -73,5 +75,5 @@ function stop (win) {
   a.href = url
   a.download = 'CodeCam ' + new Date().toLocaleString() + '.webm'
   a.click()
-  win.URL.revokeObjectURL(url)
+  window.URL.revokeObjectURL(url)
 }

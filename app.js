@@ -1,20 +1,20 @@
 'use strict'
 
-const { app, BrowserWindow, Menu, MenuItem } = require('electron')
+const { app, dialog, BrowserWindow, Menu, MenuItem } = require('electron')
 
-let mainWindow
+let win
 
 function createWindow () {
-  mainWindow = new BrowserWindow({ width: 1920, height: 1080, frame: false })
+  win = new BrowserWindow({ width: 1920, height: 1080, frame: false })
 
-  mainWindow.loadURL(`file://${__dirname}/index.html`)
-  // mainWindow.webContents.openDevTools()
+  win.loadURL(`file://${__dirname}/index.html`)
+  win.webContents.openDevTools()
 
-  mainWindow.on('closed', function () {
-    mainWindow = null
+  win.on('closed', function () {
+    win = null
   })
 
-  defaultMenu()
+  defaultMenu(win)
 }
 
 app.on('ready', createWindow)
@@ -26,12 +26,12 @@ app.on('window-all-closed', function () {
 })
 
 app.on('activate', function () {
-  if (mainWindow === null) {
+  if (win === null) {
     createWindow()
   }
 })
 
-function defaultMenu () {
+function defaultMenu (win) {
   const menu = new Menu()
 
   menu.append(new MenuItem({
@@ -54,8 +54,8 @@ function defaultMenu () {
         label: 'Start recording',
         accelerator: 'CmdOrCtrl+U',
         click (item, win) {
-          recordMenu()
-          mainWindow.webContents.send('record-start')
+          recordMenu(win)
+          win.webContents.send('record-start')
         }
       }
     ]
@@ -64,7 +64,7 @@ function defaultMenu () {
   Menu.setApplicationMenu(menu)
 }
 
-function recordMenu () {
+function recordMenu (win) {
   const menu = new Menu()
 
   menu.append(new MenuItem({
@@ -74,7 +74,17 @@ function recordMenu () {
         label: 'Quit',
         accelerator: 'CmdOrCtrl+Q',
         click () {
-          app.exit()
+          dialog.showMessageBox(win, {
+            type: 'warning',
+            buttons: ['Yes', 'No'],
+            title: 'Confirm',
+            message: 'Recording is still on. Still want to exit?'
+          }, (confirm) => {
+            if (confirm === 0) {
+              win.onbeforeunload = null
+              app.exit()
+            }
+          })
         }
       }
     ]
@@ -87,8 +97,8 @@ function recordMenu () {
         label: 'Stop recording',
         accelerator: 'CmdOrCtrl+I',
         click (item, win) {
-          defaultMenu()
-          mainWindow.webContents.send('record-stop')
+          defaultMenu(win)
+          win.webContents.send('record-stop')
         }
       }
     ]
