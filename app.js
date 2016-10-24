@@ -14,6 +14,24 @@ function createWindow () {
     mainWindow = null
   })
 
+  defaultMenu()
+}
+
+app.on('ready', createWindow)
+
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', function () {
+  if (mainWindow === null) {
+    createWindow()
+  }
+})
+
+function defaultMenu () {
   const menu = new Menu()
 
   menu.append(new MenuItem({
@@ -36,14 +54,8 @@ function createWindow () {
         label: 'Start recording',
         accelerator: 'CmdOrCtrl+U',
         click (item, win) {
+          recordMenu()
           mainWindow.webContents.send('record-start')
-        }
-      },
-      {
-        label: 'Stop recording',
-        accelerator: 'CmdOrCtrl+I',
-        click (item, win) {
-          mainWindow.webContents.send('record-stop')
         }
       }
     ]
@@ -52,16 +64,35 @@ function createWindow () {
   Menu.setApplicationMenu(menu)
 }
 
-app.on('ready', createWindow)
+function recordMenu () {
+  const menu = new Menu()
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
+  menu.append(new MenuItem({
+    label: 'CodeCam',
+    submenu: [
+      {
+        label: 'Quit',
+        accelerator: 'CmdOrCtrl+Q',
+        click () {
+          app.exit()
+        }
+      }
+    ]
+  }))
 
-app.on('activate', function () {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
+  menu.append(new MenuItem({
+    label: 'RECORDING...',
+    submenu: [
+      {
+        label: 'Stop recording',
+        accelerator: 'CmdOrCtrl+I',
+        click (item, win) {
+          defaultMenu()
+          mainWindow.webContents.send('record-stop')
+        }
+      }
+    ]
+  }))
+
+  Menu.setApplicationMenu(menu)
+}
