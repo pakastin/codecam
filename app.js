@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu, MenuItem } = require('electron')
 
 let mainWindow
 
@@ -13,6 +13,43 @@ function createWindow () {
   mainWindow.on('closed', function () {
     mainWindow = null
   })
+
+  const menu = new Menu()
+
+  menu.append(new MenuItem({
+    label: 'CodeCam',
+    submenu: [
+      {
+        label: 'Quit',
+        accelerator: 'CmdOrCtrl+Q',
+        click () {
+          app.exit()
+        }
+      }
+    ]
+  }))
+
+  menu.append(new MenuItem({
+    label: 'Record',
+    submenu: [
+      {
+        label: 'Start recording',
+        accelerator: 'CmdOrCtrl+U',
+        click (item, win) {
+          mainWindow.webContents.send('record-start')
+        }
+      },
+      {
+        label: 'Stop recording',
+        accelerator: 'CmdOrCtrl+I',
+        click (item, win) {
+          mainWindow.webContents.send('record-stop')
+        }
+      }
+    ]
+  }))
+
+  Menu.setApplicationMenu(menu)
 }
 
 app.on('ready', createWindow)
