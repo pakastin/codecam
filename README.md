@@ -1,6 +1,6 @@
 # CODECAM
 work in progress..
-[![CODECAM preview](https://pakastin.github.io/codecam/preview.gif)](https://pakastin.github.io/codecam)
+[![CODECAM preview](https://pakastin.github.io/codecam/preview.gif)](https://pakastin.github.io/codecam/index.html)
 
 ## Usage
 ```
